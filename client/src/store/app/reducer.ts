@@ -5,7 +5,6 @@ import {AppState, initialState} from "./types";
 export const reducer = handleActions<AppState, any>(
     {
         [ACTION_TYPES.LOGOUT_SUCCESS]: (): AppState => {
-            localStorage.removeItem("tours")
             localStorage.removeItem("purchasedTours")
             return {
                 ...initialState
