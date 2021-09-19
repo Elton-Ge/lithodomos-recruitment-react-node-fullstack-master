@@ -1,6 +1,6 @@
 import React from "react";
-import TourCard from "../../HomeRoutes/TourCard";
 import {gql, useQuery} from "@apollo/client";
+import TourCard from "../../HomeRoutes/TourCard";
 import {LITHODOMOS_TEST_getCurrentUser as User} from "./__generated__/LITHODOMOS_TEST_getCurrentUser";
 import {CardContainer, ToursTitle, Wrapper} from "../../HomeRoutes/Tours";
 

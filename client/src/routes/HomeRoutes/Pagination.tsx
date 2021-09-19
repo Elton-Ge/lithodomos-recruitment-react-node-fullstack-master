@@ -18,8 +18,8 @@ export default function Pagination(props: propsType) {
     );
 }
 
+//pagination container
 export const PageContainer = styled.div<{ activePage?: number }>`
-  //pagination
   ul {
     text-align: center;
     border: 1px solid #f3e0ac;

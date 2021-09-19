@@ -2,7 +2,6 @@ import {gql, useQuery} from "@apollo/client";
 import React, {useState} from "react";
 import styled from "styled-components";
 import Pagination from "./Pagination";
-// @ts-ignore
 import TourCard from "./TourCard";
 import {LITHODOMOS_TEST_GetToursForHomeScreen as Data} from "./__generated__/LITHODOMOS_TEST_GetToursForHomeScreen";
 
