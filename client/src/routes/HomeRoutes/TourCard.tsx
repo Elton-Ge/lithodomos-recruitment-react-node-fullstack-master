@@ -35,11 +35,11 @@ export interface LITHODOMOS_TEST_Tour_Card {
 const TourCard: React.FC<LITHODOMOS_TEST_Tour_Card> =
     ({id, name, priceUSDCents, thumbnailURL, updateToursHandler, purchased}) => {
         // @ts-ignore
-        const purchasedToursIds = useSelector(state => state.app.purchasedToursIds)
         const dispatch = useDispatch()
         const history = useHistory()
         // @ts-ignore
-        const {jwt} = useSelector(state => state.app)
+        const {jwt, purchasedToursIds} = useSelector(state => state.app)
+
         const [purchasedTours] = useMutation(ADD_TOUR_TO_CART, {
             onError: (error) => toast.error(error.message),
             onCompleted: () => {
