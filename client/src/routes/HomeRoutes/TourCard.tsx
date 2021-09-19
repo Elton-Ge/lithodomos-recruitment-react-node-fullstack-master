@@ -2,8 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import {gql, useMutation} from "@apollo/client";
 import {toast} from "react-toastify";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useHistory} from "react-router";
+import {getPurchasedToursSuccess} from "../../store/app/actions";
 
 export const ADD_TOUR_TO_CART = gql`
   mutation  TourCard ($id: ID!){
@@ -27,22 +28,24 @@ export interface LITHODOMOS_TEST_Tour_Card {
     priceUSDCents: number;
     thumbnailURL: string | null;
     updateToursHandler?: Function;
+
     [propsName: string]: any;
 }
 
 const TourCard: React.FC<LITHODOMOS_TEST_Tour_Card> =
     ({id, name, priceUSDCents, thumbnailURL, updateToursHandler, purchased}) => {
-        let array: string[] = JSON.parse(localStorage?.getItem("purchasedTours") as string) || [];
+        // @ts-ignore
+        const purchasedToursIds = useSelector(state => state.app.purchasedToursIds)
+        const dispatch = useDispatch()
         const history = useHistory()
         // @ts-ignore
         const {jwt} = useSelector(state => state.app)
-
         const [purchasedTours] = useMutation(ADD_TOUR_TO_CART, {
             onError: (error) => toast.error(error.message),
             onCompleted: () => {
-                array.push(id)
-                localStorage.setItem("purchasedTours", JSON.stringify(array));
-                (updateToursHandler as Function)(array);
+                // @ts-ignore
+                dispatch(getPurchasedToursSuccess([...purchasedToursIds, id]));
+                (updateToursHandler as Function)();
                 toast.success(`Successfully Purchased ${name}.Please Enjoy`, {
                     position: toast.POSITION.TOP_CENTER
                 });

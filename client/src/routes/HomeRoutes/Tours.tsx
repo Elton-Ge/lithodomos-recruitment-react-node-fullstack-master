@@ -1,9 +1,10 @@
 import {gql, useQuery} from "@apollo/client";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import Pagination from "./Pagination";
 import TourCard from "./TourCard";
 import {LITHODOMOS_TEST_GetToursForHomeScreen as Data} from "./__generated__/LITHODOMOS_TEST_GetToursForHomeScreen";
+import {useSelector} from "react-redux";
 
 export const GET_TOURS = gql`
   query LITHODOMOS_TEST_GetToursForHomeScreen($pageNumber: Int!,$recordsPerPage: Int!,$ids: [String]) {
@@ -22,22 +23,28 @@ export const GET_TOURS = gql`
 `;
 
 export const Tours: React.FC = () => {
-    //get purchased-tours ids
-    const ids = JSON.parse(localStorage?.getItem("purchasedTours") as string) || [];
+
     //pagination
     const [pageNumber, setPageNumber] = useState(1);
     const recordsPerPage = 3;
     const pageHandler = (page: { selected: any; }) => {
         setPageNumber(page.selected + 1)
     }
+    // @ts-ignore
+    const ids = useSelector(state => state.app.purchasedToursIds);
+
     //query tours
     const {loading, data, error, refetch} = useQuery<Data>(GET_TOURS, {
         variables: {pageNumber, recordsPerPage, ids},
     });
 
+    useEffect(() => {
+        refetch({pageNumber, recordsPerPage, ids})
+    }, [ids, pageNumber, refetch])
+
     //func props to TourCard
-    const updateToursHandler = async (ids: string[]) => {
-        await refetch({pageNumber, recordsPerPage, ids})
+    const updateToursHandler = () => {
+        refetch({pageNumber, recordsPerPage, ids})
     }
     // get result to render
     let result;

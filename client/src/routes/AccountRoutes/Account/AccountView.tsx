@@ -3,6 +3,8 @@ import {gql, useQuery} from "@apollo/client";
 import TourCard from "../../HomeRoutes/TourCard";
 import {LITHODOMOS_TEST_getCurrentUser as User} from "./__generated__/LITHODOMOS_TEST_getCurrentUser";
 import {CardContainer, ToursTitle, Wrapper} from "../../HomeRoutes/Tours";
+import {useDispatch} from "react-redux";
+import {getPurchasedToursSuccess} from "../../../store/app/actions";
 
 export const GET_CURRENT_USER = gql`
   query LITHODOMOS_TEST_getCurrentUser {
@@ -22,7 +24,7 @@ export const AccountView: React.FC = () => {
     const {loading, data, error} = useQuery<User, null>(GET_CURRENT_USER, {
         fetchPolicy: "network-only",
     });
-
+    const dispatch = useDispatch();
     //get result to render
     let result;
     if (loading && !data?.result) {
@@ -32,8 +34,8 @@ export const AccountView: React.FC = () => {
     } else {
         const purchasedTours = data?.result?.purchasedTours || [];
         const ids = data?.result?.purchasedTours.map(x => x.id);
-        localStorage.setItem('purchasedTours', JSON.stringify(ids));
-
+        // @ts-ignore
+        dispatch(getPurchasedToursSuccess(ids))
         result = purchasedTours.map((tour) => (
             <TourCard
                 key={tour.id}
